@@ -49,6 +49,7 @@ public class Arrow : MonoBehaviour {
 			audioSource.PlayOneShot(arrowHitSound);
 			trailParticles.Stop();
 			hitParticles.transform.position = c.contacts[0].point;
+			hitParticles.transform.rotation = Quaternion.LookRotation(c.contacts[0].normal);
 			hitParticles.Play();
 			return;
 		}

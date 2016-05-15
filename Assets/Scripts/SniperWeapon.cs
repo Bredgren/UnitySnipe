@@ -20,7 +20,7 @@ public class SniperWeapon : MonoBehaviour {
 
 	private AudioSource audioSource;
 
-	private Camera camera;
+	private Camera playerCamera;
 	private float baseFOV;
 	private MouseLook mouseLook;
 	private Vector2 baseMouseSensitivity;
@@ -43,8 +43,8 @@ public class SniperWeapon : MonoBehaviour {
 	void Start() {
 		lastFireTime = Time.time - reloadTime;
 		audioSource = GetComponent<AudioSource>();
-		camera = GetComponentInParent<Camera>();
-		baseFOV = camera.fieldOfView; 
+		playerCamera = GetComponentInParent<Camera>();
+		baseFOV = playerCamera.fieldOfView; 
 		mouseLook = GetComponentInParent<MouseLook>();
 		baseMouseSensitivity.x = mouseLook.XSensitivity;
 		baseMouseSensitivity.y = mouseLook.YSensitivity;
@@ -57,7 +57,7 @@ public class SniperWeapon : MonoBehaviour {
 			bulletLine.enabled = true;
 			bulletLine.SetPosition(0, barrel.position);
 
-			Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+			Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit)) {
 				bulletLine.SetPosition(1, hit.point);
@@ -70,12 +70,12 @@ public class SniperWeapon : MonoBehaviour {
 			lastFireTime = Time.time;
 		}
 		if (Input.GetButtonDown("Fire2")) {
-			camera.fieldOfView = zoomFOV;
+			playerCamera.fieldOfView = zoomFOV;
 			mouseLook.XSensitivity = zoomMouseSensitivity;
 			mouseLook.YSensitivity = zoomMouseSensitivity;
 		}
 		if (Input.GetButtonUp("Fire2")) {
-			camera.fieldOfView = baseFOV;
+			playerCamera.fieldOfView = baseFOV;
 			mouseLook.XSensitivity = baseMouseSensitivity.x;
 			mouseLook.YSensitivity = baseMouseSensitivity.y;
 		}
