@@ -1,17 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class SniperWeapon : MonoBehaviour {
 	public Transform barrel;
 	public float reloadTime = 1.0f;
 	public float effectsDisplayTime = 0.2f;
+	public float zoomFOV = 10.0f;
+	public float zoomMouseSensitivity = 0.5f;
 
 	public LineRenderer bulletLine;
+	public ParticleSystem bullitHitParticles;
+	public AudioClip shootSound;
 
 	public bool drawCrosshair = true;
 	public Color crosshairColor = Color.white;
 
 	private float lastFireTime;
+
+	private AudioSource audioSource;
+
+	private Camera camera;
+	private float baseFOV;
+	private MouseLook mouseLook;
+	private Vector2 baseMouseSensitivity;
 
 	// ch = crosshair
 	private Texture2D chTex;
@@ -19,7 +31,7 @@ public class SniperWeapon : MonoBehaviour {
 	private GUIStyle chLineStyle;
 	private float chSize = 10.0f;
 	private float chMaxBloom = 20.0f;
-	private float chWidth = 2.0f;
+	private float chWidth = 1.0f;
 
 	void Awake() {
 		chTex = new Texture2D(1, 1);
@@ -30,29 +42,42 @@ public class SniperWeapon : MonoBehaviour {
 
 	void Start() {
 		lastFireTime = Time.time - reloadTime;
+		audioSource = GetComponent<AudioSource>();
+		camera = GetComponentInParent<Camera>();
+		baseFOV = camera.fieldOfView; 
+		mouseLook = GetComponentInParent<MouseLook>();
+		baseMouseSensitivity.x = mouseLook.XSensitivity;
+		baseMouseSensitivity.y = mouseLook.YSensitivity;
 	}
 
 	void Update() {
 		if (Time.time > lastFireTime + reloadTime && Input.GetButtonDown("Fire1")) {
-			Debug.Log("fire");
+			audioSource.PlayOneShot(shootSound);
 			//	gunLight.enabled = true;
 			bulletLine.enabled = true;
 			bulletLine.SetPosition(0, barrel.position);
 
-			Ray ray = GetComponentInParent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+			Ray ray = camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit)) {
 				bulletLine.SetPosition(1, hit.point);
+				bullitHitParticles.transform.position = hit.point;
+				bullitHitParticles.transform.rotation = Quaternion.LookRotation(hit.normal);
+				bullitHitParticles.Play();
 			} else {
 				bulletLine.SetPosition(1, barrel.position + barrel.forward * 10000);
 			}
 			lastFireTime = Time.time;
 		}
 		if (Input.GetButtonDown("Fire2")) {
-			Debug.Log("zoom in");
+			camera.fieldOfView = zoomFOV;
+			mouseLook.XSensitivity = zoomMouseSensitivity;
+			mouseLook.YSensitivity = zoomMouseSensitivity;
 		}
 		if (Input.GetButtonUp("Fire2")) {
-			Debug.Log("zoom out");
+			camera.fieldOfView = baseFOV;
+			mouseLook.XSensitivity = baseMouseSensitivity.x;
+			mouseLook.YSensitivity = baseMouseSensitivity.y;
 		}
 
 		if (Time.time > lastFireTime + effectsDisplayTime) {
