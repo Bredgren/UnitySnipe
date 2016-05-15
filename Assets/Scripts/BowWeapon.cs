@@ -37,6 +37,7 @@ public class BowWeapon : MonoBehaviour {
 		drawingArrowInitPos = drawingArrow.transform.localPosition;
 		float halfLength = drawingArrow.GetComponentInChildren<Renderer>().bounds.size.z / 2;
 		maxPullOffset = new Vector3(0, 0, -halfLength + 0.1f);
+		lastFireTime = Time.time - reloadTime;
 	}
 
 	void Update() {
