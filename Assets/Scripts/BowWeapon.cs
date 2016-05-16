@@ -93,22 +93,22 @@ public class BowWeapon : MonoBehaviour {
 		Vector2 centerPoint = new Vector2(Screen.width / 2, Screen.height / 2);
 	
 		if (drawCrosshair) {
-			float maxWidth = 21;
-			float width = Mathf.Lerp(maxWidth, 3, pullPercent);
-			float height = Mathf.Lerp(3, 2, pullPercent);
+			float maxWidth = 20;
+			float width = Mathf.Lerp(maxWidth, 2, pullPercent);
+			float height = 1;//Mathf.Lerp(2, 1, pullPercent);
 
 			GUI.Box(new Rect(centerPoint.x - (width / 2), centerPoint.y - (height / 2), width, height), GUIContent.none, chLineStyle);
 
 			//float yOffset = Mathf.Lerp(20, 5, pullPercent);
 			float yOffset = 20;
 			width = maxWidth * 0.75f;
-			height *= 0.75f;
+			//height *= 0.75f;
 			GUI.Box(new Rect(centerPoint.x - (width / 2), centerPoint.y - (height / 2) + yOffset, width, height), GUIContent.none, chLineStyle);
 
 			//yOffset = Mathf.Lerp(40, 10, pullPercent);
 			yOffset = 40;
 			width *= 0.75f;
-			height *= 0.75f;
+			//height *= 0.75f;
 			GUI.Box(new Rect(centerPoint.x - (width / 2), centerPoint.y - (height / 2) + yOffset, width, height), GUIContent.none, chLineStyle);
 		}
 	}

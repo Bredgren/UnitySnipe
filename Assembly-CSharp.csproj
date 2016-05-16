@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\SCC\Math3d.cs" />
      <Compile Include="Assets\Scripts\SimpleMovingTarget.cs" />
      <Compile Include="Assets\Scripts\SniperWeapon.cs" />
+     <Compile Include="Assets\WeaponSwitcher.cs" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" />
      <None Include="Assets\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />

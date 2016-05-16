@@ -4,7 +4,7 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class SniperWeapon : MonoBehaviour {
 	public Transform barrel;
-	public float reloadTime = 1.0f;
+	public float reloadTime = 2.0f;
 	public float effectsDisplayTime = 0.2f;
 	public float zoomFOV = 10.0f;
 	public float zoomMouseSensitivity = 0.5f;
@@ -24,6 +24,8 @@ public class SniperWeapon : MonoBehaviour {
 	private float baseFOV;
 	private MouseLook mouseLook;
 	private Vector2 baseMouseSensitivity;
+
+	private bool active;
 
 	// ch = crosshair
 	private Texture2D chTex;
@@ -51,6 +53,9 @@ public class SniperWeapon : MonoBehaviour {
 	}
 
 	void Update() {
+		if (!active) {
+			return;
+		}
 		if (Time.time > lastFireTime + reloadTime && Input.GetButtonDown("Fire1")) {
 			audioSource.PlayOneShot(shootSound);
 			//	gunLight.enabled = true;
@@ -113,6 +118,9 @@ public class SniperWeapon : MonoBehaviour {
 	//}
 
 	void OnGUI() {
+		if (!active) {
+			return;
+		}
 		Vector2 centerPoint = new Vector2(Screen.width / 2, Screen.height / 2);
 
 		if (drawCrosshair) {
@@ -134,5 +142,22 @@ public class SniperWeapon : MonoBehaviour {
 				chTex.SetPixel(x, y, crosshairColor);
 			chTex.Apply();
 		}
+	}
+
+	public void SwitchFrom() {
+		playerCamera.fieldOfView = baseFOV;
+		mouseLook.XSensitivity = baseMouseSensitivity.x;
+		mouseLook.YSensitivity = baseMouseSensitivity.y;
+		foreach (Renderer r in GetComponentsInChildren<Renderer>()) {
+			r.enabled = false;
+		}
+		active = false;
+	}
+
+	public void SwitchTo() {
+		foreach (Renderer r in GetComponentsInChildren<Renderer>()) {
+			r.enabled = true;
+		}
+		active = true;
 	}
 }
