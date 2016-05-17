@@ -44,10 +44,7 @@ public class Arrow : MonoBehaviour {
 	
 		Arrow a = c.collider.GetComponentInParent<Arrow>();
 		if (a != null && !a.IsStuck()) {
-			stationary = true;
-			GetComponent<Collider>().isTrigger = false;
-			audioSource.PlayOneShot(arrowHitSound);
-			trailParticles.Stop();
+			MakeInert();
 			hitParticles.transform.position = c.contacts[0].point;
 			hitParticles.transform.rotation = Quaternion.LookRotation(c.contacts[0].normal);
 			hitParticles.Play();
@@ -75,7 +72,13 @@ public class Arrow : MonoBehaviour {
 		Destroy(attachPoint);
 	}
 
-	bool IsStuck() {
+	public void MakeInert() {
+		stationary = true;
+		audioSource.PlayOneShot(arrowHitSound);
+		trailParticles.Stop();
+	}
+
+	public bool IsStuck() {
 		return stuck;
 	}
 }
