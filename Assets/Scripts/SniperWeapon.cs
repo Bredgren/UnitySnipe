@@ -14,7 +14,7 @@ public class SniperWeapon : MonoBehaviour {
 	public AudioClip shootSound;
 
 	public bool drawCrosshair = true;
-	public Color crosshairColor = Color.white;
+	public Color crosshairColor = new Color(1.0f, 1.0f, 1.0f, 0.784f);
 
 	private float lastFireTime;
 
