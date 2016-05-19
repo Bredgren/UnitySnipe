@@ -72,7 +72,9 @@ public class SniperWeapon : MonoBehaviour {
 				Arrow a = hit.collider.GetComponentInParent<Arrow>();
 				if (a != null && !a.IsStuck()) {
 					a.MakeInert();
-					hit.rigidbody.AddForceAtPosition(-hit.normal * 1000.0f, hit.point);
+				}
+				if (hit.rigidbody != null) {
+					hit.rigidbody.AddForceAtPosition((hit.point - barrel.position).normalized * 1000.0f, hit.point);	
 				}
 			} else {
 				bulletLine.SetPosition(1, barrel.position + barrel.forward * 10000);
