@@ -9,8 +9,8 @@ public class SniperWeapon : MonoBehaviour {
 	public float zoomFOV = 10.0f;
 	public float zoomMouseSensitivity = 0.5f;
 
-	public LineRenderer bulletLine;
 	public ParticleSystem bullitHitParticles;
+	public ParticleSystem trailParticles;
 	public AudioClip shootSound;
 
 	public bool drawCrosshair = true;
@@ -59,13 +59,12 @@ public class SniperWeapon : MonoBehaviour {
 		if (Time.time > lastFireTime + reloadTime && Input.GetButtonDown("Fire1")) {
 			audioSource.PlayOneShot(shootSound);
 			//	gunLight.enabled = true;
-			bulletLine.enabled = true;
-			bulletLine.SetPosition(0, barrel.position);
+
+			ParticleSystem.ShapeModule trailShape = trailParticles.shape;
 
 			Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit)) {
-				bulletLine.SetPosition(1, hit.point);
 				bullitHitParticles.transform.position = hit.point;
 				bullitHitParticles.transform.rotation = Quaternion.LookRotation(hit.normal);
 				bullitHitParticles.Play();
@@ -76,9 +75,13 @@ public class SniperWeapon : MonoBehaviour {
 				if (hit.rigidbody != null) {
 					hit.rigidbody.AddForceAtPosition((hit.point - barrel.position).normalized * 1000.0f, hit.point);	
 				}
+				trailParticles.transform.position = barrel.position + barrel.forward * (hit.point - barrel.position).magnitude / 2;
+				trailShape.radius = (hit.point - barrel.position).magnitude / 2;
 			} else {
-				bulletLine.SetPosition(1, barrel.position + barrel.forward * 10000);
+				trailParticles.transform.position = barrel.position + barrel.forward * 500;
+				trailShape.radius = 1000;
 			}
+			trailParticles.Play();
 			lastFireTime = Time.time;
 		}
 		if (Input.GetButtonDown("Fire2")) {
@@ -93,7 +96,6 @@ public class SniperWeapon : MonoBehaviour {
 		}
 
 		if (Time.time > lastFireTime + effectsDisplayTime) {
-			bulletLine.enabled = false;
 			//	gunLight.enabled = false;
 		}
 	}
