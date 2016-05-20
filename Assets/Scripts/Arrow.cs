@@ -19,6 +19,8 @@ public class Arrow : MonoBehaviour {
 	private GameObject attachPoint;
 	private float minVel = 0.1f;
 
+	private Quaternion lastRotation;
+
 	void Start() {
 		rb = GetComponent<Rigidbody>();
 		audioSource = GetComponent<AudioSource>();
@@ -35,11 +37,12 @@ public class Arrow : MonoBehaviour {
 				transform.rotation = Quaternion.FromToRotation(Vector3.up, rb.velocity);	
 			}
 		}
+		lastRotation = transform.rotation;
 	}
 
 	void OnCollisionEnter(Collision c) {
 		if (stuck) {
-			return; // or we might stick to something else
+			return; // prevents sticking to something else
 		}
 	
 		Arrow a = c.collider.GetComponentInParent<Arrow>();
@@ -55,6 +58,10 @@ public class Arrow : MonoBehaviour {
 	
 		stuck = true;
 		rb.isKinematic = true;
+
+		// Using the last rotation helps minimize some weird rotation upon collision.
+		// My guess is the physics of the collision starts taking effect slightly before OnCollisionEnter is called.
+		transform.rotation = lastRotation;
 
 		// Creating an intermediate object prevents weird scaling when reparenting
 		attachPoint = new GameObject();
