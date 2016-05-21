@@ -44,6 +44,8 @@ public class Arrow : MonoBehaviour {
 		if (stuck) {
 			return; // prevents sticking to something else
 		}
+
+		GetComponent<Collider>().enabled = false;
 	
 		Arrow a = c.collider.GetComponentInParent<Arrow>();
 		if (a != null && !a.IsStuck()) {

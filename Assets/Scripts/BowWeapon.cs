@@ -27,6 +27,12 @@ public class BowWeapon : MonoBehaviour {
 	public Texture2D crosshairDot;
 	public Texture2D crosshairCircle;
 
+	public ParticleSystem newArrowParticles;
+
+	//	private AudioSource audioSource;
+	//	public AudioClip fireSound;
+	//	public AudioClip newArrowSound;
+
 	void Awake() {
 		chTex = new Texture2D(1, 1);
 		chLineStyle = new GUIStyle();
@@ -38,6 +44,7 @@ public class BowWeapon : MonoBehaviour {
 		float halfLength = drawingArrow.GetComponentInChildren<Renderer>().bounds.size.z / 2;
 		maxPullOffset = new Vector3(0, 0, -halfLength + 0.1f);
 		lastFireTime = Time.time - reloadTime;
+//		audioSource = GetComponent<AudioSource>();
 	}
 
 	void Update() {
@@ -51,6 +58,10 @@ public class BowWeapon : MonoBehaviour {
 			pullPercent = 0.0f;
 		}
 		if (Time.time > lastFireTime + reloadTime) {
+			if (!drawingArrow.activeSelf) {
+//				audioSource.PlayOneShot(newArrowSound);
+				newArrowParticles.Play();
+			}
 			drawingArrow.SetActive(true);
 
 			if (pull && !pullStarted) {
@@ -76,6 +87,7 @@ public class BowWeapon : MonoBehaviour {
 				pullPercent = 0.0f;
 
 				lastFireTime = Time.time;
+//				audioSource.PlayOneShot(fireSound);
 			}
 
 			if (pull) {
