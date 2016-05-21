@@ -44,8 +44,6 @@ public class Arrow : MonoBehaviour {
 		if (stuck) {
 			return; // prevents sticking to something else
 		}
-
-		GetComponent<Collider>().enabled = false;
 	
 		Arrow a = c.collider.GetComponentInParent<Arrow>();
 		if (a != null && !a.IsStuck()) {
@@ -55,6 +53,8 @@ public class Arrow : MonoBehaviour {
 			hitParticles.Play();
 			return;
 		}
+
+		GetComponent<Collider>().enabled = false;
 	
 		audioSource.PlayOneShot(hitSound);
 	
