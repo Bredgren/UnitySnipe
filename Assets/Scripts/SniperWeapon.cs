@@ -78,8 +78,8 @@ public class SniperWeapon : MonoBehaviour {
 				trailParticles.transform.position = barrel.position + barrel.forward * (hit.point - barrel.position).magnitude / 2;
 				trailShape.radius = (hit.point - barrel.position).magnitude / 2;
 			} else {
-				trailParticles.transform.position = barrel.position + barrel.forward * 500;
-				trailShape.radius = 1000;
+				trailParticles.transform.position = barrel.position + barrel.forward * 250;
+				trailShape.radius = 500;
 			}
 			trailParticles.Play();
 			lastFireTime = Time.time;
